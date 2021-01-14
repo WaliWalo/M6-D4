@@ -9,7 +9,8 @@ const getArticles = async (req, res) => {
   const articles = await Article.find(query.criteria, query.options.fields)
     .skip(query.options.skip)
     .limit(query.options.limit)
-    .sort(query.options.sort);
+    .sort(query.options.sort)
+    .populate("author");
   res.send({ links: query.links("/articles", total), articles });
 };
 
@@ -23,13 +24,18 @@ const addNewArticle = (req, res) => {
   });
 };
 
-const getArticleById = (req, res) => {
-  Article.findById(req.params.articleId, (err, article) => {
-    if (err) {
-      res.send(err);
-    }
-    res.json(article);
-  });
+const getArticleById = async (req, res, next) => {
+  const article = await Article.findById(req.params.articleId).populate(
+    "author"
+  );
+  console.log(article);
+  if (article) {
+    res.status(200).send(article);
+  } else {
+    let error = new Error();
+    error.httpStatusCode = 404;
+    next(error);
+  }
 };
 
 const updateArticle = (req, res) => {

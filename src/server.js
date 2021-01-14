@@ -4,7 +4,7 @@ const { join } = require("path");
 const listEndpoints = require("express-list-endpoints");
 const mongoose = require("mongoose");
 const routes = require("./routes/articleRoutes");
-
+const authorRoutes = require("./routes/authorRoutes");
 const {
   notFoundHandler,
   badRequestHandler,
@@ -21,6 +21,7 @@ server.use(express.json());
 
 server.use(cors());
 routes(server);
+authorRoutes(server);
 
 // ERROR HANDLERS MIDDLEWARES
 
