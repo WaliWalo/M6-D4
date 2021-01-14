@@ -4,6 +4,9 @@ const {
   getArticleById,
   updateArticle,
   deleteArticle,
+  updateClap,
+  removeClap,
+  calculateClap,
 } = require("../controllers/articleControllers");
 const {
   getReviews,
@@ -46,6 +49,12 @@ const routes = (app) => {
     .get(getReviewById)
     .put(updateReview)
     .delete(deleteReview);
+
+  app.route("/articles/:articleId/clap").post(updateClap);
+
+  app.route("/articles/:articleId/removeClap").post(removeClap);
+
+  app.route("/articles/:articleId/calculateClap").get(calculateClap);
 };
 
 module.exports = routes;

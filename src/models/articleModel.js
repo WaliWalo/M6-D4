@@ -33,8 +33,33 @@ const ArticleSchema = new Schema(
         },
       },
     ],
+    claps: [{ userId: { type: String, require: true } }],
   },
   { timestamps: true }
 );
 
+ArticleSchema.static("addClap", async function (userId, articleId) {
+  const article = await ArticleModel.findOneAndUpdate(
+    { _id: articleId },
+    { $addToSet: { claps: userId } },
+    { new: true, useFindAndModify: false }
+  );
+  return article;
+});
+
+ArticleSchema.static("removeClap", async function (user, articleId) {
+  const article = await ArticleModel.findOneAndUpdate(
+    { _id: articleId },
+    { $pull: { claps: { userId: user.userId } } },
+    { new: true, useFindAndModify: false }
+  );
+  return article;
+});
+
+ArticleSchema.static("countClap", async function (articleId) {
+  const article = await ArticleModel.findById(articleId);
+  return article.claps.length;
+});
+
+const ArticleModel = mongoose.model("Article", ArticleSchema);
 module.exports = ArticleSchema;

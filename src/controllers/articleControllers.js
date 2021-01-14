@@ -60,10 +60,29 @@ const deleteArticle = (req, res) => {
     res.json(article);
   });
 };
+
+const updateClap = async (req, res, next) => {
+  const respond = await Article.addClap(req.body, req.params.articleId);
+  res.send(respond);
+};
+
+const removeClap = async (req, res) => {
+  const respond = await Article.removeClap(req.body, req.params.articleId);
+  res.send(respond);
+};
+
+const calculateClap = async (req, res) => {
+  const respond = await Article.countClap(req.params.articleId);
+  res.json(respond);
+};
+
 module.exports = {
   getArticles,
   addNewArticle,
   getArticleById,
   updateArticle,
   deleteArticle,
+  updateClap,
+  removeClap,
+  calculateClap,
 };
